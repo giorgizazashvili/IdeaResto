@@ -32,6 +32,22 @@ class OrderForm
                     ->default(Order::STATUS_PENDING)
                     ->native(false),
 
+                Select::make('payment_status')
+                    ->label('გადახდის სტატუსი')
+                    ->options(Order::getPaymentStatuses())
+                    ->required()
+                    ->default(Order::PAYMENT_UNPAID)
+                    ->native(false)
+                    ->live(),
+
+                TextInput::make('paid_amount')
+                    ->label('გადახდილი თანხა')
+                    ->numeric()
+                    ->prefix('₾')
+                    ->step(0.01)
+                    ->default(0)
+                    ->visible(fn ($get) => $get('payment_status') === Order::PAYMENT_PARTIAL),
+
                 Textarea::make('notes')
                     ->label('შენიშვნები')
                     ->rows(2)

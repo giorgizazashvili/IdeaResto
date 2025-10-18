@@ -15,12 +15,15 @@ class Order extends Model
         'table_id',
         'user_id',
         'status',
+        'payment_status',
         'total_amount',
+        'paid_amount',
         'notes',
     ];
 
     protected $casts = [
         'total_amount' => 'decimal:2',
+        'paid_amount' => 'decimal:2',
     ];
 
     // სტატუსები
@@ -32,6 +35,11 @@ class Order extends Model
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_CANCELLED = 'cancelled';
 
+    // გადახდის სტატუსები
+    public const PAYMENT_UNPAID = 'unpaid';
+    public const PAYMENT_PAID = 'paid';
+    public const PAYMENT_PARTIAL = 'partial';
+
     public static function getStatuses(): array
     {
         return [
@@ -42,6 +50,15 @@ class Order extends Model
             self::STATUS_SERVED => 'მიტანილია',
             self::STATUS_COMPLETED => 'დასრულებული',
             self::STATUS_CANCELLED => 'გაუქმებული',
+        ];
+    }
+
+    public static function getPaymentStatuses(): array
+    {
+        return [
+            self::PAYMENT_UNPAID => 'გადაუხდელი',
+            self::PAYMENT_PAID => 'გადახდილი',
+            self::PAYMENT_PARTIAL => 'ნაწილობრივ გადახდილი',
         ];
     }
 

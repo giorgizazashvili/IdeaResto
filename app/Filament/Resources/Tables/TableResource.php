@@ -26,6 +26,8 @@ class TableResource extends Resource
 
     protected static ?string $pluralModelLabel = 'მაგიდები';
 
+    protected static ?int $navigationSort = 1;
+
     protected static ?string $recordTitleAttribute = 'number';
 
     public static function form(Schema $schema): Schema

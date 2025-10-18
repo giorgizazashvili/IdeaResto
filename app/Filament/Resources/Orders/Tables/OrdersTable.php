@@ -59,6 +59,18 @@ class OrdersTable
                     })
                     ->sortable(),
 
+                TextColumn::make('payment_status')
+                    ->label('გადახდა')
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => Order::getPaymentStatuses()[$state] ?? $state)
+                    ->color(fn (string $state): string => match ($state) {
+                        Order::PAYMENT_PAID => 'success',
+                        Order::PAYMENT_UNPAID => 'danger',
+                        Order::PAYMENT_PARTIAL => 'warning',
+                        default => 'gray',
+                    })
+                    ->sortable(),
+
                 TextColumn::make('user.name')
                     ->label('მომსახურე')
                     ->sortable()
@@ -76,6 +88,11 @@ class OrdersTable
                     ->options(Order::getStatuses())
                     ->native(false),
 
+                SelectFilter::make('payment_status')
+                    ->label('გადახდის სტატუსი')
+                    ->options(Order::getPaymentStatuses())
+                    ->native(false),
+
                 SelectFilter::make('table_id')
                     ->label('მაგიდა')
                     ->relationship('table', 'number')
@@ -86,6 +103,12 @@ class OrdersTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                \Filament\Actions\Action::make('receipt')
+                    ->label('ანგარიში')
+                    ->icon('heroicon-o-document-text')
+                    ->color('success')
+                    ->url(fn ($record) => route('orders.receipt', $record))
+                    ->openUrlInNewTab(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

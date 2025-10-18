@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Orders\Pages;
 
 use App\Filament\Resources\Orders\OrderResource;
+use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Components\View as ViewComponent;
@@ -15,6 +16,12 @@ class ViewOrder extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('receipt')
+                ->label('ანგარიშის ნახვა')
+                ->icon('heroicon-o-document-text')
+                ->color('success')
+                ->url(fn ($record) => route('orders.receipt', $record))
+                ->openUrlInNewTab(),
             EditAction::make(),
         ];
     }
